@@ -1,0 +1,1080 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+		@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+		 
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+		
+
+		
+		.fadeInEffect {
+			animation: fadeIn 2s ease-in forwards;
+		}
+
+
+				
+		@keyframes neon {
+			from {
+				text-shadow:
+				0 0 6px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) + 10%), 0.92),
+				0 0 25px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) - 10%), 0.34),
+				0 0 12px hsla(var(--base-hue), var(--base-saturation), var(--base-lightness), 0.52),
+				0 0 20px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) + 5%), 0.92),
+				0 0 35px hsla(var(--base-hue), var(--base-saturation), var(--base-lightness), 0.78),
+				0 0 50px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) - 5%), 0.92);
+			}
+			to {
+				text-shadow:
+				0 0 15px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) + 15%), 0.98),
+				0 0 55px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) - 15%), 0.42),
+				0 0 30px hsla(var(--base-hue), var(--base-saturation), var(--base-lightness), 0.58),
+				0 0 45px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) + 10%), 0.84),
+				0 0 60px hsla(var(--base-hue), var(--base-saturation), var(--base-lightness), 0.88),
+				0 0 100px hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) - 10%), 1);
+			}
+		}
+
+
+		#NewRecordContainer {
+			position: relative;
+			display: inline-block;
+		}
+
+		@keyframes shimmeringWave {
+			0% {
+				background-position: -200% center;
+				opacity: 0;
+				transform: translateX(-100%); /* Slides in from the left */
+			}
+			10% {
+				opacity: 1;
+				transform: translateX(0%); /* Fully visible in position */
+			}
+			80% {
+				background-position: 200% center;
+				opacity: 1;
+			}
+			100% {
+				opacity: 0;
+			}
+		}
+		
+
+	#NewRecordFlash {
+		position: absolute;
+		top: 45%;  /* Adjust this to move it vertically as desired */
+		left: 0;
+		right: 0;
+		bottom: 0%; /* Adjust this to make it smaller vertically */
+		background: linear-gradient(60deg, var(--primary-color) 20%, var(--secondary-color) 50%, var(--primary-color) 80%);
+		background-size: 200% 100%; 
+		z-index: -1;
+		animation: shimmeringWave 3s forwards;
+		-webkit-mask-image: linear-gradient(to right, black 0%, black 20%, transparent 100%);
+		mask-image: linear-gradient(to right, black 0%, black 20%, transparent 100%);
+	}
+
+        /*
+            表示設定 (1)
+        */
+
+        * {
+            /* フォント （一部のフォントは上手く適用されない） */
+            font-family: "Quicksand";
+            font-size: 12px;
+        }
+
+        body, html {
+            margin: 0;
+        }
+
+        html {
+            height: 100%;
+
+            /* 外枠 */
+            /*border: 1px solid rgba(0,0,0,0.1);*/
+            
+            /* はみ出た内容はスクロールバーを表示させずに隠す
+             * 今のところ、ブラウザへの入力はできないので表示させても無意味 */
+            overflow: hidden;
+            
+            /* 背景色 */
+            background-color: transparent;
+        }
+
+        .resizeHandle {
+            /* リサイズ用のハンドル
+             * リサイズができる場所はウィンドウ右下の16x16ピクセルの場所
+             * この部分が完全に透明だとマウス入力が透過してしまってサイズを変更できなくなる */
+            background-image: url(handle.png);
+            background-position: bottom right;
+            background-repeat: no-repeat;
+            box-sizing: border-box;
+        }
+
+        #combatantTable {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+			background-color: rgba(0, 0, 0, 0.2);
+        }
+			
+		table#combatantTable td svg {
+			width: 13px;  /* occupy full width of the cell */
+			height: auto; /* keep the SVG aspect ratio */
+			display: inline-block;
+			vertical-align: middle;
+			max-height: 100%; /* ensure it doesn't exceed the cell height */
+		}
+
+
+        /* キャラクターデータのテキストの設定 */
+        #combatantTableBody * {
+            color: #fff;
+            text-shadow: -1px 0 4px #000, 0 1px 4px #000, 1px 0 4px #000, 0 -1px 4px #000;
+            font-weight: 300;
+
+            /* はみ出たテキストを「…」で省略する */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+			
+        }
+
+        /* エンカウント情報とテーブルヘッダ内のテキストの設定 */
+        #encounter,
+        #combatantTableHeader * {
+            color:#bce8fa;
+            text-shadow: -1px 0 3px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.9), 1px 0 3px rgba(0, 0, 0, 0.9), 0 -1px 3px rgba(0, 0, 0, 0.9);
+            font-weight: 300;
+            white-space: nowrap;
+        }
+				
+
+        /* テーブルヘッダの下線の設定 */
+        /*#combatantTableHeader tr {
+            border-bottom: 1px solid #DED7BE;
+        }*/
+		
+		#combatantTableHeader th {
+			border-bottom: 1px solid #DED7BE;
+		}
+		
+		.hidden {
+			display: none;
+		}
+
+	
+		/* These styles are only applied when a new record is achieved */
+		
+		.highlight {
+            color: var(--font-color);
+			//animation: neon 1.6s ease-in-out infinite alternate;
+        }
+		
+		.NewRecordStyles #NewRecordText {
+			animation: fadeIn 2s ease-in forwards, neon 0.4s ease-in-out infinite alternate 2s;
+			
+		}
+		
+		#NewRecordText {
+			text-shadow: 
+			-2px -2px 0 #000,  
+			2px -2px 0 #000,
+			-2px 2px 0 #000,
+			2px 2px 0 #000,
+			-2px 0px 0 #000, 
+			0px 2px 0 #000,
+			2px 0px 0 #000, 
+			0px -2px 0 #000;
+			opacity: 0;
+			font-size: 1.5rem;
+			padding: 2rem 2rem 0.2rem 0.1rem;
+			font-weight:600;
+			text-align: center;
+			line-height: 1;
+			color: var(--font-color);
+			
+		}
+		
+		
+		
+	:root {
+    --base-hue: 50;
+    --base-saturation: 80%;
+    --base-lightness: 50%;
+    --base-alpha: 0.5;
+		
+		--primary-color: hsla(var(--base-hue), var(--base-saturation), var(--base-lightness), var(--base-alpha));
+		
+		/* For secondary-color, we lighten the primary color and adjust the alpha */
+		--secondary-color: hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) + 30%), 0.8);
+		
+		/* For font-color, we lighten the primary color even more */
+		--font-color: hsla(var(--base-hue), var(--base-saturation), calc(var(--base-lightness) + 40%), 1);
+	}
+
+
+		
+		
+		/* These styles are only applied during combat to avoid visual clutter */
+		
+		.InCombatStyles #combatantTableHeader th {
+			border-bottom: none;
+		}
+
+		.InCombatStyles #combatantTableHeader th:not(:nth-last-child(1)):not(:nth-last-child(2)) {
+			border-bottom: 1px solid #DED7BE;
+		}
+
+		.InCombatStyles #combatantTable td:nth-child(5),
+		.InCombatStyles #combatantTable td:nth-child(6),
+		.InCombatStyles #combatantTableHeader th:nth-child(5),
+		.InCombatStyles #combatantTableHeader th:nth-child(6) {  
+			opacity: 0.5;
+		}
+		
+		.InCombatStyles #combatantTable, 
+		.InCombatStyles #combatantTable th, 
+		.InCombatStyles #combatantTable td, 
+		.InCombatStyles #combatantTable tr {
+			background-color: transparent !important;
+		}
+
+		
+		
+
+    </style>
+    <script src="https://overlayplugin.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
+    <script>
+	const positiveIconSVG = `
+	<svg fill="#8bc534" width="5px" height="5px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg">
+		<path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"/>
+	</svg>`;
+
+		
+	const negativeIconSVG = `
+	<svg fill="#e74c3c" width="5px" height="5px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg">
+		<path d="M3 5h18a1.002 1.002 0 0 1 .823 1.569l-9 13c-.373.539-1.271.539-1.645 0l-9-13A.999.999 0 0 1 3 5z"/>
+	</svg>`;
+
+	const noChangeIconSVG = `
+	<svg width="5px" height="5px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 12h18" fill="none" stroke="#f39c12" stroke-width="2"/>
+	</svg>`;
+
+	const slightlyPositiveChangeIconSVG = `
+	<svg fill="#8bc534" width="5px" height="5px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg">
+		<path d="M3 12h18"/>
+	</svg>`;
+
+	const slightlyNegativeChangeIconSVG = `
+	<svg fill="#e74c3c" width="5px" height="5px" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg">
+		<path d="M3 12h18"/>
+	</svg>`;
+
+	
+	
+	function getDifferenceIcon(diff,isPercentage) {
+		// Parsing logic for percent values
+		if (isPercentage) {
+			diff = parseFloat((typeof diff === 'string' ? diff.replace('%', '') : diff));
+		} else {
+			diff = parseFloat(diff);
+		}
+		
+		if (diff > 0.5) return positiveIconSVG;
+		if (diff < -0.5) return negativeIconSVG;
+		return noChangeIconSVG;
+	}
+	
+	function dismissNewRecordAchieved(){
+		document.body.classList.remove("NewRecordStyles");
+		document.getElementById("NewRecordText").classList.add("hidden");
+		document.getElementById("NewRecordContainer").classList.add("hidden");
+		removeAllHighlights();
+	}
+	
+
+	function newRecordAchieved() {
+		document.body.classList.add("NewRecordStyles");
+		document.getElementById("NewRecordText").classList.remove("hidden");
+		document.getElementById("NewRecordContainer").classList.remove("hidden");
+		applyHighlights();
+		const flash = document.getElementById('NewRecordFlash');
+		flash.style.animation = 'none';
+		setTimeout(function() {
+			flash.style.animation = '';
+		}, 10); 
+		
+
+	}
+	
+	function removeAllHighlights() {
+    const table = document.getElementById('combatantTableBody');
+    const cells = table.querySelectorAll('td.highlight');  // get all cells with the 'highlight' class
+
+    cells.forEach(cell => {
+        cell.classList.remove('highlight');
+    });
+}
+
+
+	function applyHighlights() {
+		const table = document.getElementById('combatantTableBody');
+		const rows = table.querySelectorAll('tr');  // get all rows in the table
+
+		rows.forEach(row => {
+			const cells = row.querySelectorAll('td');  // get all cells in the current row
+
+			if (cells.length > 3) {  // check if there are at least 4 cells in the row
+				const valueText = cells[3].innerText.trim().replace('%', '');  // get value of 4th cell and remove '%'
+				const value = parseFloat(valueText);  // convert the string to float
+
+				if (value > 0) {  // check if value is positive
+					cells[0].classList.add('highlight');  // apply style to 1st cell
+					cells[1].classList.add('highlight');  // apply style to 2nd cell
+					cells[3].classList.add('highlight');  // apply style to 4th cell
+				}
+			}
+		});
+	}
+
+
+
+
+
+
+
+	
+	class SinglePullData {
+		/**
+		 * Creates a new SinglePullData instance.
+		 * @param {object} statDefinitions - Definitions for each stat to track.
+		 */
+		constructor(statDefinitions) {
+			this.statDefinitions = statDefinitions;
+			this.dataStore = {};
+			
+			// Initialize storage for each defined stat.
+			for (let stat in statDefinitions) {
+				this.dataStore[stat] = {
+					data: {}, // Data points for the stat.
+					averageDifferenceLast: {}, // Average difference compared to last pull over time.
+					averageDifferenceBest: {} // Average difference compared to best pull over time.
+				};
+			}
+		}
+		
+		setAverageDifferenceLast(stat, timeIndex, value) {
+			if (this.dataStore[stat]) {
+				// Only store the value if it's a valid number
+				if (!isNaN(value) && value !== null && value !== undefined) {
+					this.dataStore[stat].averageDifferenceLast[timeIndex] = value.toFixed(0) + "%";
+				}
+			} else {
+				throw new Error(`Stat "${stat}" not defined.`);
+			}
+		}
+
+		setAverageDifferenceBest(stat, timeIndex, value) {
+			if (this.dataStore[stat]) {
+				// Only store the value if it's a valid number
+				if (!isNaN(value) && value !== null && value !== undefined) {
+					this.dataStore[stat].averageDifferenceBest[timeIndex] = value.toFixed(0) + "%";
+				}
+			} else {
+				throw new Error(`Stat "${stat}" not defined.`);
+			}
+		}
+
+
+
+		/**
+		 * Updates a specific stat's value at a given time index.
+		 * @param {string} stat - The stat to update.
+		 * @param {number} timeIndex - The time index for the data.
+		 * @param {number} value - The value to store.
+		 */
+		updateValue(stat, timeIndex, value) {
+			if (this.dataStore[stat]) {
+				this.dataStore[stat].data[timeIndex] = value;
+			} else {
+				throw new Error(`Stat "${stat}" not defined.`);
+			}
+		}
+
+		/**
+		 * Retrieves a specific stat's value at a given time index.
+		 * @param {string} stat - The stat to retrieve.
+		 * @param {number} timeIndex - The time index to retrieve data for.
+		 * @returns {number|null} - The value, or null if not available.
+		 */
+		getValue(stat, timeIndex) {
+			if (this.dataStore[stat] && this.dataStore[stat].data.hasOwnProperty(timeIndex)) {
+				return this.dataStore[stat].data[timeIndex];
+			}
+			return undefined;
+		}
+		
+		resetCumulativeData() {
+			for (let stat in this.dataStore) {
+				this.dataStore[stat].cumulativeDifference = 0;
+				this.dataStore[stat].averageDifference = 0;
+			}
+		}
+
+		/**
+		 * Sets the average difference for a specific stat.
+		 * @param {string} stat - The stat to set.
+		 * @param {number} value - The average difference value.
+		 */
+		setAverageDifference(stat, value) {
+			if (this.dataStore[stat]) {
+				this.dataStore[stat].averageDifference = value;
+			} else {
+				throw new Error(`Stat "${stat}" not defined.`);
+			}
+		}
+
+		/**
+		 * Retrieves the average difference for a specific stat.
+		 * @param {string} stat - The stat to retrieve.
+		 * @returns {number} - The average difference.
+		 */
+		getAverageDifference(stat) {
+			if (this.dataStore[stat]) {
+				return this.dataStore[stat].averageDifference;
+			}
+			return 0; 
+		}
+		
+		clone() {
+			const cloned = new SinglePullData(this.statDefinitions);
+			cloned.dataStore = JSON.parse(JSON.stringify(this.dataStore));
+			return cloned;
+		}
+
+
+		/**
+		 * Fills in gaps in the provided data array by averaging adjacent values.
+		 * @param {Array} dataArray - The data array with potential gaps.
+		 * @param {boolean} isPercentage - Indicates if the data is in percentage format.
+		 * @returns {Array} - The data array with filled gaps.
+		 */
+		fillDataGaps(dataArray, isPercentage) {
+			const processValue = (value) => {
+				if (isPercentage) {
+					return parseFloat((value || "0").replace('%', ''));
+				}
+				return parseFloat(value || 0);
+			};
+
+			const formatValue = (value) => {
+				if (isPercentage) {
+					return value + "%";
+				}
+				return Math.round(value).toString();
+			};
+
+			const sortedKeys = Object.keys(dataArray).map(Number).sort((a, b) => a - b);
+			const maxKey = sortedKeys[sortedKeys.length - 1];
+
+			for (let i = 0; i <= maxKey; i++) {
+				// If current key (i) doesn't exist in the dataArray
+				if (!dataArray.hasOwnProperty(i)) {
+					let prevValue, nextValue;
+
+					// Find the previous valid key's value
+					for (let j = i - 1; j >= 0; j--) {
+						if (dataArray.hasOwnProperty(j)) {
+							prevValue = processValue(dataArray[j]);
+							break;
+						}
+					}
+
+					// Find the next valid key's value
+					for (let j = i + 1; j <= maxKey; j++) {
+						if (dataArray.hasOwnProperty(j)) {
+							nextValue = processValue(dataArray[j]);
+							break;
+						}
+					}
+
+					// If either prevValue or nextValue wasn't found, use 0 as default
+					prevValue = prevValue !== undefined ? prevValue : 0;
+					nextValue = nextValue !== undefined ? nextValue : 0;
+					let newValue = Math.round((prevValue + nextValue) / 2);
+					
+					
+					dataArray[i] = isNaN(newValue) ? "∞" : formatValue(newValue);
+				}
+			}
+			return dataArray;
+		}
+
+
+
+		/**
+		 * Recalculates the average differences based on the filled data.
+		 * @param {Array} dataArray - The data dictionary with filled values.
+		 * @param {boolean} isPercentage - Indicates if the data is in percentage format.
+		 * @param {string} stat - The current stat being processed.
+		 * @returns {Object} - An object containing averageDifferenceLast and averageDifferenceBest dictionaries.
+		 */
+		recalculateAverageDifferences(dataArray, isPercentage, stat) {
+
+			let averageDifferenceLast = {};
+			let averageDifferenceBest = {};
+
+			const sortedKeys = Object.keys(dataArray).sort((a, b) => parseInt(a) - parseInt(b));
+			for (let i = 1; i < sortedKeys.length; i++) {
+				const key = sortedKeys[i];
+
+				// Only recalculate if the difference doesn't exist
+				if (!averageDifferenceLast.hasOwnProperty(key)) {
+
+					const currValue = currentCombatData.getValue(stat, parseInt(key));
+					const prevValue = previousCombatData.getValue(stat, parseInt(key));
+					const diffLast = percentageDifference(prevValue, currValue, isPercentage);
+					currentCombatData.setAverageDifferenceLast(stat, parseInt(key), diffLast);
+				}
+
+				// Only recalculate if the difference doesn't exist
+				if (!averageDifferenceBest.hasOwnProperty(key)) {
+					const currValue = currentCombatData.getValue(stat, parseInt(key));
+					const bestValue = bestPullCombatData.getValue(stat, parseInt(key));
+					const diffBest = percentageDifference(bestValue, currValue, isPercentage);
+					currentCombatData.setAverageDifferenceBest(stat, parseInt(key), diffBest);
+				}
+			}
+
+			return {
+				averageDifferenceLast: currentCombatData.dataStore[stat].averageDifferenceLast,
+				averageDifferenceBest: currentCombatData.dataStore[stat].averageDifferenceBest
+			};
+		}
+
+
+
+		/**
+		 * Fills gaps in data and recalculates average differences.
+		 */
+		fillGapsInData() {
+			for (let stat in this.statDefinitions) {
+				const isPercentage = this.statDefinitions[stat].isPercentage;
+
+				// Fill gaps in the main data
+				this.dataStore[stat].data = this.fillDataGaps(this.dataStore[stat].data, isPercentage);
+
+				// Recalculate average differences based on the filled data
+				const recalculatedDiffs = this.recalculateAverageDifferences(this.dataStore[stat].data, isPercentage, stat);
+				this.dataStore[stat].averageDifferenceLast = recalculatedDiffs.averageDifferenceLast;
+				this.dataStore[stat].averageDifferenceBest = recalculatedDiffs.averageDifferenceBest;
+			}
+		}
+
+
+
+		/**
+		 * Trims data points and their respective average differences after the specified final duration.
+		 * @param {string} statKey - The stat key to trim.
+		 * @param {number} finalDuration - The final duration index.
+		 */
+		trimDataForStatKey(statKey, finalDuration) {
+			const currentData = this.dataStore[statKey].data;
+			const keysToTrim = Object.keys(currentData).filter(key => parseInt(key) > finalDuration);
+			keysToTrim.forEach(key => {
+				delete currentData[key];
+				delete this.dataStore[statKey].averageDifferenceLast[key];
+				delete this.dataStore[statKey].averageDifferenceBest[key];
+			});
+		}
+
+
+		/**
+		 * Trims data points after the specified final duration. If a statKey is provided, 
+		 * it will trim the data for that statKey. If no statKey is provided, it will trim
+		 * the data for all statKeys.
+		 * @param {string} [statKey] - Optional. The stat key to trim.
+		 * @param {number} finalDuration - The final duration index.
+		 */
+		trimDataAfterFinalDuration(statKey, finalDuration) {
+			if (arguments.length === 1) {
+				finalDuration = statKey;  // If only one argument is provided, it's the finalDuration.
+				for (let key in this.dataStore) {
+					this.trimDataForStatKey(key, finalDuration);
+				}
+			} else if (this.dataStore[statKey]) {
+				this.trimDataForStatKey(statKey, finalDuration);
+			} else {
+				throw new Error(`Stat "${statKey}" not defined.`);
+			}
+		}
+
+
+	}
+	
+	function percentageDifference(prevValue, currValue, isPercentage = false) {
+		
+		if (currValue === null || prevValue === null) {
+			return null;
+		}
+		
+		if (currValue === undefined || prevValue === undefined) {
+			return undefined;
+		}
+		
+		// Parsing logic for percent values
+		if (isPercentage) {
+			prevValue = parseFloat((typeof prevValue === 'string' ? prevValue.replace('%', '') : prevValue));
+			currValue = parseFloat((typeof currValue === 'string' ? currValue.replace('%', '') : currValue));
+		} else {
+			prevValue = parseFloat(prevValue);
+			currValue = parseFloat(currValue);
+		}
+		
+		 //Handle NaN 
+		if (isNaN(prevValue)) {
+			if (isPercentage){
+				return currValue;
+			}
+		}
+
+		// Handle the special case when prevValue is 0
+		if (prevValue === 0) {
+			if (currValue === 0) {
+				return 0;
+			} else {
+				return isPercentage ? currValue : 0;
+			}
+		}
+
+		let diff = parseFloat((((currValue - prevValue) / prevValue) * 100).toFixed(2));
+		
+		return diff;
+	}
+	
+
+	
+	function formatNumberWithCommas(value) {
+		if (typeof value === "string" && value.includes('%')) {
+			return value;
+		}
+
+		if (typeof value === "number") {
+			return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		} else if (typeof value === "string" && !isNaN(parseFloat(value))) {
+			return parseFloat(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		return value;  
+	}
+
+
+
+
+	var encounterDefine = "{title} / Time: {duration} / {CurrentZoneName}";
+	var useHTMLEncounterDefine = false;
+	var combatTimeIndex = 0;
+	var lastEncounterActive = "false";
+
+	var statDefinitions = {
+		"DPS": {
+			displayName: "DPS",
+			dataKey: "ENCDPS",
+			isPercentage: false,
+		},
+		"DMG": {displayName: "DMG",
+			dataKey: "damage",
+			isPercentage: false,
+		},
+		"Crit": {
+			displayName: "Crit",
+			dataKey: "crithit%",
+			isPercentage: true,
+		},
+		"DH": {
+			displayName: "DH",
+			dataKey: "DirectHitPct",
+			isPercentage: true,
+		},
+		"CDH": {
+			displayName: "CDH",
+			dataKey: "CritDirectHitPct",
+			isPercentage: true,
+		},
+		// ... Add other stats here as needed
+	};
+
+	
+	var currentCombatData = new SinglePullData(statDefinitions);
+	var previousCombatData = new SinglePullData(statDefinitions);
+	var bestPullCombatData = new SinglePullData(statDefinitions);
+
+	//Create the columnOrder configuration object.
+	var columnOrder = ["Stat", "Current", "vsLast", "vsBest", "Best", "Last"];
+
+	//Create the columns object which defines both the headers and the bodies.
+	var columns = {
+		"Stat": {
+			header: {text: "Stat", width: "7%", align: "left"},
+			body: function(combatant, index, type) {
+				return type;
+			}
+		},
+		"Best": {
+			header: {text: "Best", width: "16%", align: "center"},
+			body: function(combatant, index, type) {
+				var bestValue = bestPullCombatData.getValue(type, combatTimeIndex);
+				if (bestValue === undefined) return "--";
+				if (bestValue === null) return "null";
+				if (isNaN(bestValue) && type.isPercentage === false) return "NaN";
+				return formatNumberWithCommas(bestValue);
+			}
+		},
+		"Last": {
+			header: {text: "Last", width: "16%", align: "center"},
+			body: function(combatant, index, type) {
+				var prevValue = previousCombatData.getValue(type, combatTimeIndex);
+				if (prevValue === undefined) return "--";
+				if (prevValue === null) return "null";
+				if (isNaN(prevValue) && type.isPercentage === false) return "NaN";
+				return formatNumberWithCommas(prevValue);
+			}
+		},
+		"Current": {
+			header: {text: "Current", width: "16%", align: "center"},
+			body: function(combatant, index, type) {
+				var currValue = combatant[statDefinitions[type].dataKey];
+				if (currValue === undefined) return "--";
+				if (currValue === null) return "null";
+				if (isNaN(currValue) && type.isPercentage === false) return "NaN";
+				return formatNumberWithCommas(currValue);
+			}
+		},
+		"vsLast": {
+			header: {text: "vs Last", width: "16%", align: "right"},
+			body: function(combatant, index, type) {
+				const diffLast = currentCombatData.dataStore[type].averageDifferenceLast[combatTimeIndex];
+				if (diffLast === undefined) return "--";
+				if (diffLast === null) return "null";
+				if (isNaN(diffLast) && type.isPercentage === false) return "NaN";
+				let diffText = diffLast;
+				diffText += getDifferenceIcon(diffLast,type.isPercentage);
+				return diffText;
+			},
+			isHTML: true
+		},
+		"vsBest": {
+			header: {text: "vs Best", width: "16%", align: "right"},
+			body: function(combatant, index, type) {
+				const diffBest = currentCombatData.dataStore[type].averageDifferenceBest[combatTimeIndex];
+				if (diffBest === undefined) return "--";
+				if (diffBest === null) return "null";
+				if (isNaN(diffBest) && type.isPercentage === false) return "NaN";
+				let diffText = diffBest;
+				diffText += getDifferenceIcon(diffBest,type.isPercentage);
+				return diffText;
+			},
+			isHTML: true
+		}
+	};
+
+	//Modify the headerDefine and bodyDefine arrays to be generated dynamically.
+	var headerDefine = columnOrder.map(key => columns[key].header);
+	var bodyDefine = columnOrder.map(key => ({
+		text: columns[key].body,
+		width: columns[key].header.width,
+		align: columns[key].header.align,
+		isHTML: columns[key].isHTML || false
+	}));
+
+
+
+
+
+    var isNewCombat = false;
+	var isNewRecord = false;
+	function update(data) {
+	
+    combatTimeIndex = parseInt(data.Encounter.DURATION, 10);
+    const combatant = data.Combatant;
+	
+
+	if (data.isActive === "true") {
+		document.body.classList.add("InCombatStyles");
+		
+		if (isNewCombat){
+			if (isNewRecord){
+				bestPullCombatData = currentCombatData.clone();
+				isNewRecord = false;
+				dismissNewRecordAchieved();
+			}
+			
+			previousCombatData = currentCombatData.clone();			
+			bestPullCombatData.resetCumulativeData();
+			previousCombatData.resetCumulativeData();
+			
+			currentCombatData = new SinglePullData(statDefinitions);
+			isNewCombat=false;
+		}
+		
+		for (let statKey in statDefinitions) {
+			const stat = statDefinitions[statKey];
+
+			// Update current data
+			currentCombatData.updateValue(statKey, combatTimeIndex, combatant[stat.dataKey]);
+
+			// Process difference vs last Pull
+			const prevValue = previousCombatData.getValue(statKey, combatTimeIndex);
+			const currValue = combatant[stat.dataKey];
+			const diffLast = percentageDifference(prevValue, currValue, stat.isPercentage);
+			currentCombatData.setAverageDifferenceLast(statKey, combatTimeIndex, diffLast);
+			
+
+			// Process difference vs best Pull
+			const bestValue = bestPullCombatData.getValue(statKey, combatTimeIndex);
+			const diffBest = percentageDifference(bestValue, currValue, stat.isPercentage);
+			currentCombatData.setAverageDifferenceBest(statKey, combatTimeIndex, diffBest);
+			
+			//console.log(JSON.stringify(currentCombatData));
+
+		}
+	}
+	
+	// If combat is over
+    if (data.isActive === "false" && lastEncounterActive === "true") {
+        currentCombatData.trimDataAfterFinalDuration(combatTimeIndex);
+        currentCombatData.fillGapsInData();
+        isNewCombat=true;
+		document.body.classList.remove("InCombatStyles");
+		
+		var bestPullLastIndex = Math.max(...Object.keys(bestPullCombatData.dataStore.DPS.data).map(Number));
+		var bestPullLastDPSValue = parseFloat(bestPullCombatData.getValue("DPS", bestPullLastIndex) || 0);
+		
+		var currentLastIndex = Math.max(...Object.keys(currentCombatData.dataStore.DPS.data).map(Number));
+		var currentDPSValue = parseFloat(currentCombatData.getValue("DPS", currentLastIndex) || 0);
+
+		
+		if (currentDPSValue > bestPullLastDPSValue || currentLastIndex > bestPullLastIndex) {
+			isNewRecord=true;
+			newRecordAchieved();
+		}
+
+		
+    }
+
+    lastEncounterActive = data.isActive;
+
+    updateEncounter(data);
+    if (document.getElementById("combatantTableHeader") == null) {
+        updateCombatantListHeader();
+    }
+    updateCombatantList(data,isNewRecord);
+	
+	
+}
+
+	// onOverlayStateUpdate イベントを購読
+	document.addEventListener("onOverlayStateUpdate", function(e) {
+		if (!e.detail.isLocked) {
+			displayResizeHandle();
+		} else {
+			hideResizeHandle();
+		}
+	});
+	
+	function displayResizeHandle() {
+		document.documentElement.classList.add("resizeHandle");
+	}
+
+	function hideResizeHandle() {
+		document.documentElement.classList.remove("resizeHandle");
+	}
+
+	// CombatData イベントを購読
+	addOverlayListener("CombatData", (e) => {
+		if (e.Combatant["YOU"]) {
+			// Create a new object containing only data for "YOU" and unnest the "YOU" combatant
+			const filteredData = {
+				type: e.type,
+				Encounter: e.Encounter,
+				Combatant: e.Combatant["YOU"],
+				isActive: e.isActive
+			};
+			update(filteredData);
+		}
+	});
+
+
+	
+	startOverlayEvents();
+
+	// エンカウント情報を更新する
+	function updateEncounter(data) {
+		// 要素取得
+		var encounterElem = document.getElementById('encounter');
+
+		// テキスト取得
+		var elementText;
+		if (typeof encounterDefine === 'function') {
+			elementText = encounterDefine(data.Encounter);
+			if (typeof elementText !== 'string') {
+				console.log("updateEncounter: 'encounterDefine' is declared as function but not returns a value as string.");
+				return;
+			}
+		} else if (typeof encounterDefine === 'string') {
+			elementText = parseActFormat(encounterDefine, data.Encounter);
+			
+		} else {
+			console.log("updateEncounter: 'encounterDefine' should be string or function that returns string.");
+			return;
+		}
+
+		// テキスト設定
+		if (!useHTMLEncounterDefine) {
+			encounterElem.innerText = parseActFormat(elementText, data.Encounter);
+		} else {
+			encounterElem.innerHTML = parseActFormat(elementText, data.Encounter);
+		}
+	}
+
+	// ヘッダを更新する
+	function updateCombatantListHeader() {
+		var table = document.getElementById('combatantTable');
+		var tableHeader = document.createElement("thead");
+		tableHeader.id = "combatantTableHeader";
+		var headerRow = tableHeader.insertRow();
+
+		for (var i = 0; i < headerDefine.length; i++) {
+			var cell = document.createElement("th");
+			// テキスト設定
+			if (typeof headerDefine[i].text !== 'undefined') {
+				cell.innerText = headerDefine[i].text;
+			} else if (typeof headerDefine[i].html !== 'undefined') {
+				cell.innerHTML = headerDefine[i].html;
+			}
+			// 幅設定
+			cell.style.width = headerDefine[i].width;
+			cell.style.maxWidth = headerDefine[i].width;
+			// 横結合数設定
+			if (typeof headerDefine[i].span !== 'undefined') {
+				cell.colSpan = headerDefine[i].span;
+			}
+			// 行揃え設定
+			if (typeof headerDefine[i].align !== 'undefined') {
+				cell.style["textAlign"] = headerDefine[i].align;
+			}
+			headerRow.appendChild(cell);
+		}
+
+		table.tHead = tableHeader;
+	}
+
+	// プレイヤーリストを更新する
+	function updateCombatantList(data,isNewRecord) {
+		
+		var table = document.getElementById('combatantTable');
+		var oldTableBody = table.tBodies.namedItem('combatantTableBody');
+		var newTableBody = document.createElement("tbody");
+		newTableBody.id = "combatantTableBody";
+
+		
+			var combatant = data.Combatant;
+			for (var statKey in statDefinitions) {
+				var stat = statDefinitions[statKey];
+				var tableRow = newTableBody.insertRow();
+				for (var i = 0; i < bodyDefine.length; i++) {
+					var cell = tableRow.insertCell(i);
+					var cellText;
+					if (typeof bodyDefine[i].text === 'function') {
+						cellText = bodyDefine[i].text(combatant, null, stat.displayName);
+					} else {
+						cellText = parseActFormat(bodyDefine[i].text, combatant);
+					}
+					if (bodyDefine[i].isHTML) {
+						cell.innerHTML = cellText;
+					} else {
+						cell.innerText = cellText;
+					}
+					cell.style.width = bodyDefine[i].width;
+					cell.style.textAlign = bodyDefine[i].align;
+				}
+			}
+		
+
+		// Replace the old tbody with the new one
+		if (oldTableBody != void(0)) {
+			table.replaceChild(newTableBody, oldTableBody);
+		} else {
+			table.appendChild(newTableBody);
+		}
+		if (isNewRecord === true){applyHighlights();}
+	}
+
+
+	// Miniparse フォーマット文字列を解析し、表示文字列を取得する
+	function parseActFormat(str, dictionary) {
+		var result = "";
+
+		var currentIndex = 0;
+		do {
+			var openBraceIndex = str.indexOf('{', currentIndex);
+			if (openBraceIndex < 0) {
+				result += str.slice(currentIndex);
+				break;
+			} else {
+				result += str.slice(currentIndex, openBraceIndex);
+				var closeBraceIndex = str.indexOf('}', openBraceIndex);
+				if (closeBraceIndex < 0) {
+					// parse error!
+					console.log("parseActFormat: Parse error: missing close-brace for " + openBraceIndex.toString() + ".");
+					return "ERROR";
+				} else {
+					var tag = str.slice(openBraceIndex + 1, closeBraceIndex);
+					if (typeof dictionary[tag] !== 'undefined') {
+						result += dictionary[tag];
+					} else {
+						console.log("parseActFormat: Unknown tag: " + tag);
+						result += "ERROR";
+					}
+					currentIndex = closeBraceIndex + 1;
+				}
+			}
+		} while (currentIndex < str.length);
+
+		return result;
+	}
+	</script>
+</head>
+<body>
+	<div id="NewRecordContainer">
+		<div id="NewRecordFlash"></div>
+		<div id="NewRecordText" class="NewRecordStyles fadeInEffect hidden">New Record!&emsp;&emsp;</div>
+	</div>
+
+    <div id="encounter">
+        No data to show.
+        <!-- ここにエンカウント情報が入る -->
+    </div>
+
+    <table id="combatantTable">
+        <!-- ここにヘッダが入る -->
+        <!-- ここに各キャラの情報が入る -->
+    </table>
+
+</body>
+</html>
+
+
+
+
