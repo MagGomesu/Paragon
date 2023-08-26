@@ -1,6 +1,6 @@
-# Paragon ACT FFXIV Overlay (v0.0.2 Alpha)
+# Paragon ACT FFXIV Overlay (v0.0.2)
 
-Paragon is an Advanced Combat Tracker (ACT) overlay for Final Fantasy XIV that provides real-time performance tracking. This overlay allows users to track their best pull, the last pull, and the current pull, offering insights into one's gameplay and performance optimization.
+Paragon is an Advanced Combat Tracker (ACT) overlay for Final Fantasy XIV that provides real-time performance tracking. This overlay allows users to track their best pull, the last pull, and the current pull, offering insights into one's gameplay and performance optimization. The project is currently under development, this is an early alpha version to gather feedback and fix bugs if necessary.
 
 ## Features
 
@@ -37,9 +37,10 @@ To customize the appearance of the overlay, you can modify the CSS styles within
 Contributions to improve the Paragon overlay are always welcome. Please fork the repository and submit a pull request with your changes.
 
 ## Planned features for future updates
-1. Detailed graphs running comparison in real-time
+1. Detailed graphs running comparison in real-time.
 2. Customization options (fonts, colors, ...).
-3. Suggest yours!
+3. Permantent data storage per boss.
+4. Suggest yours!
 
 
 ## License
