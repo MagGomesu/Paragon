@@ -863,9 +863,9 @@
 		
 		var currentLastIndex = Math.max(...Object.keys(currentCombatData.dataStore.DPS.data).map(Number));
 		var currentDPSValue = parseFloat(currentCombatData.getValue("DPS", currentLastIndex) || 0);
-
 		
-		if (currentDPSValue > bestPullLastDPSValue || currentLastIndex > bestPullLastIndex) {
+		
+		if ((currentDPSValue > bestPullLastDPSValue && bestPullLastDPSValue > 0) || (currentLastIndex > bestPullLastIndex  && bestPullLastDPSValue > 0)) {
 			isNewRecord=true;
 			newRecordAchieved();
 		}
