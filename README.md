@@ -39,7 +39,7 @@ Contributions to improve the Paragon overlay are always welcome. Please fork the
 ## Planned features for future updates
 1. Detailed graphs running comparison in real-time.
 2. Customization options (fonts, colors, ...).
-3. Permantent data storage per boss.
+3. Permanent data storage per boss.
 4. Suggest yours!
 
 
