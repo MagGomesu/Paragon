@@ -5,8 +5,7 @@ Paragon is an Advanced Combat Tracker (ACT) overlay for Final Fantasy XIV that p
 ## Features
 
 - **Real-time Performance Tracking**: Keep an eye on your current, last, and best pulls.
-- **Sleek Design**: Featuring animations like `fadeInEffect` and neon light effects.
-- **Customizable Appearance**: Modify the overlay's appearance to match your preferences.
+- **Minimalist Design**: Nobody likes a cluttered screen, when you enter combat the UI goes transparent
 
 ## Installation
 
