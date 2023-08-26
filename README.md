@@ -20,6 +20,7 @@ Select the Custom option from the dropdown and the MiniParse type.
 ![image](https://github.com/MagGomesu/Paragon/assets/143295113/2cd20ff0-f3d9-49a9-8261-f5ed30a7881f)
 
 Then insert the URL https://maggomesu.github.io/Paragon/Paragon.html
+
 ![image](https://github.com/MagGomesu/Paragon/assets/143295113/2fa889fc-a4fb-4283-97fb-971ac93e7c14)
 
 
