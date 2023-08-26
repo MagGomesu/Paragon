@@ -9,7 +9,7 @@ Paragon is an Advanced Combat Tracker (ACT) overlay for Final Fantasy XIV that p
 
 ## Installation
 
-No download needed, use this as overlay URL: [https://maggomesu.github.io/Paragon/Paragon.html]https://maggomesu.github.io/Paragon/Paragon.html
+No download needed, use this as overlay URL: https://maggomesu.github.io/Paragon/Paragon.html
 
 
 
