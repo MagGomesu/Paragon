@@ -9,9 +9,9 @@ Paragon is an Advanced Combat Tracker (ACT) overlay for Final Fantasy XIV that p
 
 ## Installation
 
-1. Download the `Paragon.html` file.
-2. Integrate it with your ACT setup.
-3. Ensure your ACT is capturing FFXIV logs to see the overlay in action.
+No download needed, use this as overlay URL: [https://maggomesu.github.io/Paragon/Paragon.html]https://maggomesu.github.io/Paragon/Paragon.html
+
+
 
 ## Usage
 
@@ -31,11 +31,5 @@ This project is open-sourced and available under the MIT License.
 
 ## Credits
 
-Developed by [Your Name or Organization's Name]. Special thanks to the FFXIV community for their feedback and support.
+Developed by Gomesu. Special thanks to the FFXIV community for their feedback and support.
 
----
-
-For more details and support, please refer to the official documentation or raise an issue on GitHub.
-"""
-
-readme_content
