@@ -28,6 +28,10 @@ Then insert the URL https://maggomesu.github.io/Paragon/Paragon.html
 
 Once integrated with ACT, the overlay will automatically track and display your performance metrics.
 
+## Current limitations
+
+The overlay does not remember encounter names, it will simply compare the last and best done for that specific sesion, if you'd like to reset the "Best" and "Last" Values, simply reload the overlay from ACT
+
 ## Customization
 
 To customize the appearance of the overlay, you can modify the CSS styles within the `Paragon.html` file.
